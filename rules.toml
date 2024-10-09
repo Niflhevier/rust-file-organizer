@@ -1,0 +1,73 @@
+ignore = [
+    "desktop.ini",
+    "Thumbs.db",
+    "*.parts",
+    "*.crdownload",
+    "*.download",
+    "*.tmp",
+    "*.temp",
+    "*/Duplicates/*"
+]
+
+[mapping] # The key is the destination folder and the value is a list of file extensions
+
+Documents = [
+    "doc",
+    "docx",
+    "pdf",
+    "txt",
+    "ppt",
+    "pptx",
+    "xls",
+    "xlsx",
+    "csv",
+    "rtf",
+    "tex",
+    "md"
+]
+
+Pictures = ["jpg", "jpeg", "png", "gif", "bmp", "svg"]
+
+Music = ["mp3", "wav", "wma", "ogg", "flac", "aac", "m4a", "mid"]
+
+Video = [
+    "mp4",
+    "avi",
+    "mkv",
+    "flv",
+    "mov",
+    "wmv",
+    "webm",
+    "mpg",
+    "mpeg"
+]
+
+Compressed = ["zip", "rar", "r0*", "r1*", "arj", "7z", "tar", "gz", "bz2"]
+
+Programs = [
+    "exe",
+    "msi",
+    "bat",
+    "sh",
+    "jar",
+    "apk",
+    "deb",
+    "rpm",
+    "dmg",
+    "appimage"
+]
+
+Code = [
+    "py",
+    "java",
+    "cpp",
+    "c",
+    "cs",
+    "html",
+    "css",
+    "js",
+    "php",
+    "sql",
+    "ino",
+    "json"
+]
