@@ -4,11 +4,12 @@ use log::info;
 use log::LevelFilter::{Info, Warn};
 use simple_logger::SimpleLogger;
 use std::io::{self};
+use organizer::Organizer;
 
-mod file_organizer;
+mod organizer;
 mod file_entry;
 mod config;
-mod file_utils;
+mod utils;
 
 #[derive(Parser)]
 struct Args {
@@ -46,21 +47,21 @@ fn main() -> io::Result<()> {
         .unwrap();
 
     let config = Config::new(&args.directory)?;
-    let mut fm = file_organizer::FileOrganizer::new(config)?;
+    let mut organizer = Organizer::new(config)?;
 
     if args.sort_files {
         info!("Sorting files...");
-        fm.sort_all_files()?;
+        organizer.sort_all_files()?;
     }
 
     if args.move_duplicates {
         info!("Moving duplicates...");
-        fm.move_duplicates()?;
+        organizer.move_duplicates()?;
     }
 
     if args.remove_empty_folders {
         info!("Removing empty folders...");
-        fm.remove_empty_folders()?;
+        organizer.remove_empty_folders()?;
     }
 
     Ok(())

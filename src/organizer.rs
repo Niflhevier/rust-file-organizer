@@ -1,20 +1,20 @@
 use crate::config::Config;
 use crate::file_entry::FileEntry;
-use crate::file_utils::{crc64_file_checksum, generate_unique_filename, is_dir_empty};
+use crate::utils::{crc64_file_checksum, generate_unique_filename, is_dir_empty};
 use glob::Pattern;
 use log::{error, info};
 use std::collections::{HashSet, VecDeque};
 use std::{fs, io};
 use walkdir::WalkDir;
 
-pub struct FileOrganizer {
+pub struct Organizer {
     config: Config,
     files: Vec<FileEntry>,
 }
 
-impl FileOrganizer {
+impl Organizer {
     /// Scan all files in the working directory and return a `FileOrganizer` object.
-    pub fn new(config: Config) -> io::Result<FileOrganizer> {
+    pub fn new(config: Config) -> io::Result<Organizer> {
         let working_dir = &config.working_dir;
 
         let mut files = Vec::new();
@@ -33,7 +33,7 @@ impl FileOrganizer {
         });
         files.reverse();
 
-        Ok(FileOrganizer { config, files })
+        Ok(Organizer { config, files })
     }
 
     /// Sort all the files.
