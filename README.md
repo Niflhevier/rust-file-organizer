@@ -25,9 +25,8 @@ file-organizer --d <TARGET_DIRECTORY> [OPTIONS]
 
 ### Options
 
-- `-d, --directory <TARGET_DIRECTORY>`
-- `-v, --verbose`
-- `-c, --config-path <CONFIG_PATH>`
+- `-d, <TARGET_DIRECTORY>`
+- `-c, <CONFIG_PATH>`
 - `--sort-files <BOOLEAN>`
 - `--move-duplicates <BOOLEAN>`
 - `--remove-empty-folders <BOOLEAN>`

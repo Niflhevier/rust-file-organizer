@@ -17,12 +17,8 @@ struct Args {
     #[arg(short)]
     directory: String,
 
-    /// Enable verbose output.
-    #[arg(short, long, action = clap::ArgAction::SetTrue)]
-    verbose: bool,
-
     /// Path to the configuration file.
-    #[arg(short, long, default_value = "rules.toml")]
+    #[arg(short, default_value = "rules.toml")]
     config_path: String,
 
     /// Sort files.
@@ -42,7 +38,7 @@ fn main() -> io::Result<()> {
     let args = Args::parse();
 
     SimpleLogger::new()
-        .with_level(if args.verbose { Info } else { Warn })
+        .with_level(Info)
         .init()
         .unwrap();
 
