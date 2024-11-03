@@ -14,7 +14,7 @@ mod utils;
 #[derive(Parser)]
 struct Args {
     /// The target directory to operate on.
-    #[arg(short, long)]
+    #[arg(short)]
     directory: String,
 
     /// Enable verbose output.

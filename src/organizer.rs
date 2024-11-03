@@ -2,8 +2,8 @@ use crate::config::Config;
 use crate::file_entry::FileEntry;
 use crate::utils::{crc64_file_checksum, generate_unique_filename, is_dir_empty};
 use glob::Pattern;
-use log::{error, info};
-use std::collections::{HashSet, VecDeque};
+use log::error;
+use std::collections::HashSet;
 use std::{fs, io};
 use walkdir::WalkDir;
 
