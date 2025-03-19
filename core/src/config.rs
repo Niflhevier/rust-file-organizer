@@ -10,14 +10,14 @@ struct Rules {
 }
 
 pub struct Config {
-    pub working_dir: PathBuf,
+    pub target: PathBuf,
     pub mapping: HashMap<String, String>,
     pub ignored: Vec<String>,
 }
 
 impl Config {
-    pub fn new(working_dir: &str) -> Result<Self, io::Error> {
-        let path = PathBuf::from(working_dir);
+    pub fn new(target: &str) -> Result<Self, io::Error> {
+        let path = PathBuf::from(target);
 
         if !path.exists() {
             return Err(io::Error::new(
@@ -38,7 +38,10 @@ impl Config {
         })?;
 
         let rules: Rules = toml::from_str(&content).map_err(|e| {
-            io::Error::new(io::ErrorKind::InvalidData, format!("Failed to parse 'rules.toml': {}", e))
+            io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("Failed to parse 'rules.toml': {}", e),
+            )
         })?;
 
         let mut mapping: HashMap<String, String> = HashMap::new();
@@ -54,7 +57,7 @@ impl Config {
         }
 
         Ok(Self {
-            working_dir: path,
+            target: path,
             mapping,
             ignored: rules.ignore,
         })

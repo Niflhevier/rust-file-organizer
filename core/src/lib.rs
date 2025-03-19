@@ -1,7 +1,7 @@
-mod organizer;
 mod config;
-mod utils;
 mod file_entry;
+mod organizer;
+mod utils;
 
-pub use organizer::Organizer;
 pub use config::Config;
+pub use organizer::Organizer;

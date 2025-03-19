@@ -11,9 +11,7 @@ pub struct FileEntry {
 
 impl FileEntry {
     pub fn new(path: PathBuf) -> io::Result<FileEntry> {
-        Ok(FileEntry {
-            path,
-        })
+        Ok(FileEntry { path })
     }
 
     /// Move the file to a new path.
@@ -21,12 +19,19 @@ impl FileEntry {
         info!("Moving \"{}\" to \"{}\"", self.path(), new_path.display());
 
         fs::create_dir_all(new_path.parent().unwrap())?;
-        fs::rename(&self.path, &new_path).map(|_| {
-            self.path = new_path.to_path_buf();
-        }).map_err(|e| {
-            error!("Failed to move \"{}\" to \"{}\": {}", self.path(), new_path.display(), e);
-            e
-        })
+        fs::rename(&self.path, &new_path)
+            .map(|_| {
+                self.path = new_path.to_path_buf();
+            })
+            .map_err(|e| {
+                error!(
+                    "Failed to move \"{}\" to \"{}\": {}",
+                    self.path(),
+                    new_path.display(),
+                    e
+                );
+                e
+            })
     }
 
     /// Check if the file is sorted.
@@ -39,8 +44,7 @@ impl FileEntry {
 
         if let Some(target) = mapping.get(&self.extension()) {
             let pattern = format!("*/{}", target);
-            if Pattern::new(&pattern).unwrap().matches(&dir_name)
-            {
+            if Pattern::new(&pattern).unwrap().matches(&dir_name) {
                 return true;
             }
         } else if dir_name.ends_with("Others") {
@@ -63,7 +67,10 @@ impl FileEntry {
 
     /// Get the parent path of the file.
     pub fn parent_path(&self) -> Cow<str> {
-        self.path.parent().unwrap_or_else(|| Path::new("")).to_string_lossy()
+        self.path
+            .parent()
+            .unwrap_or_else(|| Path::new(""))
+            .to_string_lossy()
     }
 
     /// Get the path of the file.

@@ -15,21 +15,30 @@ pub struct Organizer {
 impl Organizer {
     /// Scan all files in the working directory and return a `FileOrganizer` object.
     pub fn new(config: Config) -> io::Result<Organizer> {
-        let working_dir = &config.working_dir;
+        let working_dir = &config.target;
 
         let mut files = Vec::new();
-        for entry in WalkDir::new(working_dir).into_iter().filter_map(Result::ok).filter(|e| e.file_type().is_file()) {
-            match FileEntry::new(
-                entry.path().to_path_buf(),
-            ) {
+        for entry in WalkDir::new(working_dir)
+            .into_iter()
+            .filter_map(Result::ok)
+            .filter(|e| e.file_type().is_file())
+        {
+            match FileEntry::new(entry.path().to_path_buf()) {
                 Ok(fe) => files.push(fe),
-                Err(e) => error!("Error processing file \"{}\": {}", entry.path().display(), e),
+                Err(e) => error!(
+                    "Error processing file \"{}\": {}",
+                    entry.path().display(),
+                    e
+                ),
             }
         }
 
         // sort files by modification time, descending
         files.sort_by_key(|f| {
-            f.path.metadata().and_then(|m| m.modified()).unwrap_or(std::time::SystemTime::UNIX_EPOCH)
+            f.path
+                .metadata()
+                .and_then(|m| m.modified())
+                .unwrap_or(std::time::SystemTime::UNIX_EPOCH)
         });
         files.reverse();
 
@@ -44,10 +53,13 @@ impl Organizer {
             }
 
             let file_name = file.name().to_string();
-            let mut new_path = self.config.working_dir.join("Others").join(&file_name);
+            let mut new_path = self.config.target.join("Others").join(&file_name);
             for (ext, target) in &self.config.mapping {
-                if Pattern::new(&format!("*{}", ext)).unwrap().matches(&file_name) {
-                    new_path = self.config.working_dir.join(target).join(&file_name);
+                if Pattern::new(&format!("*{}", ext))
+                    .unwrap()
+                    .matches(&file_name)
+                {
+                    new_path = self.config.target.join(target).join(&file_name);
                     break;
                 }
             }
@@ -59,7 +71,7 @@ impl Organizer {
     /// Remove duplicates by moving them to a "Duplicates" folder.
     pub fn move_duplicates(&mut self) -> io::Result<()> {
         let mut hash_set = HashSet::new();
-        let duplicate_dir = &self.config.working_dir.join("Duplicates");
+        let duplicate_dir = &self.config.target.join("Duplicates");
 
         if !duplicate_dir.exists() {
             fs::create_dir_all(&duplicate_dir)?;
@@ -85,7 +97,7 @@ impl Organizer {
 
     /// Remove empty folders from the working directory.
     pub fn remove_empty_folders(&self) -> io::Result<()> {
-        let mut directories: Vec<_> = WalkDir::new(&self.config.working_dir)
+        let mut directories: Vec<_> = WalkDir::new(&self.config.target)
             .into_iter()
             .filter_map(|entry| entry.ok())
             .filter(|entry| entry.path().is_dir())
