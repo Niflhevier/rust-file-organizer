@@ -1,15 +1,9 @@
-use crate::config::Config;
 use clap::Parser;
 use log::info;
-use log::LevelFilter::{Info, Warn};
+use log::LevelFilter::Info;
+use file_organizer_core::{Config, Organizer};
 use simple_logger::SimpleLogger;
 use std::io::{self};
-use organizer::Organizer;
-
-mod organizer;
-mod file_entry;
-mod config;
-mod utils;
 
 #[derive(Parser)]
 struct Args {
@@ -37,10 +31,7 @@ struct Args {
 fn main() -> io::Result<()> {
     let args = Args::parse();
 
-    SimpleLogger::new()
-        .with_level(Info)
-        .init()
-        .unwrap();
+    SimpleLogger::new().with_level(Info).init().unwrap();
 
     let config = Config::new(&args.directory)?;
     let mut organizer = Organizer::new(config)?;
